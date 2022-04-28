@@ -8,11 +8,32 @@
   <title>DDOONGDDANG's</title>
 </head>
 <body>
-<h1>base 페이지입니다.</h1>
-  {% block content %}
+
+<div class="container mt-3">
+  {% if request.user.is_authenticated %}
+    {{ user }}님 안녕하세요!
+    <li>
+      <form action="{% url 'accounts:logout' %}" method="POST">
+        {% csrf_token %}
+        <button>로그아웃</button>
+      </form>
+    </li>
+    <li>
+      <a href="{% url 'accounts:update' %}">내 정보 수정</a>
+    </li>
+  {% else %}
+    <li>
+      <a href="{% url 'accounts:signup' %}">회원가입</a>
+    </li>
+    <li>
+      <a href="{% url 'accounts:login' %}">로그인</a>
+    </li>
+  {% endif %}
   
+  {% block content %}
   {% endblock content %}
 
+</div>
 
 
 
