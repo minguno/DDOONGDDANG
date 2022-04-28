@@ -1,7 +1,19 @@
-from django.urls import path, include
+from django.urls import path
+from . import views
 
-app_name = 'roll_paper'
+app_name = 'rollpaper'
 
 urlpatterns = [
-    # path('', )
+    path('userlst/', views.userlst, name='userlst'),
+    path('write/', views.write, name='write'),
+    path('<int:pk>/', views.detail, name='detail'),
+    # path('<int:pk>/update/', views.update, name='update'),
+    
+
+    
+
+
+
+    
+
 ]

@@ -1,42 +1,48 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth
+from django.contrib.auth import (
+    authenticate, 
+    login as auth_login,
+    logout as auth_logout,
+
+)
+
+from accounts.forms import CustomCreationForm
 from .models import User
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+)
 
 # Create your views here.
 def signup(request):
 
+    if request.user.is_authenticated:
+        return redirect('roll_paper:main')
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        fullname = request.POST.get('fullname')
-        nickname = request.POST.get('nickname')
+        form = CustomCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            return redirect('accounts:login')
+    else:
+        form = CustomCreationForm()
+    context = {
+        'form': form,
+    }
 
-        print(email, password, fullname, nickname)
-        
-        user = User()
-        user.email = email
-        user.password = password
-        user.fullname = fullname
-        user.nickname = nickname
-        user.save()
-
-        return redirect('accounts:login')
-
-    return render(request, 'accounts/signup.html')
+    return render(request, 'accounts/signup.html', context)
+   
 
 def login(request):
+
     if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        # 안써도 됨
-        # fullname = request.POST['fullname']
-        # nickname = request.POST['nickname']
-        user = auth.authenticate(request, email=email, password=password)
-        
-        if user is not None:
-            auth.login(request, user)
-            return redirect('roll_paper:index')
-        else:
-            return render(request, 'accounts/login.html')
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            auth_login(request, user)
+            return redirect('roll_paper:main') #메인 페이지로 이동
     else:
-        return render(request, 'accounts/login.html')
+        form = AuthenticationForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/login.html', context)

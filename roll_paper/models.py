@@ -3,7 +3,7 @@ from django.conf import settings
 from accounts.models import User
 # Create your models here.
 
-class Letter(models.Model):
+class RollPaper(models.Model):
     
     title = models.CharField(max_length = 100)
     content = models.TextField()
