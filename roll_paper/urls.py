@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'rollpaper'
+app_name = 'roll_paper'
 
 urlpatterns = [
     path('userlst/', views.userlst, name='userlst'),
@@ -9,10 +9,6 @@ urlpatterns = [
     path('<int:pk>/', views.detail, name='detail'),
     # path('<int:pk>/update/', views.update, name='update'),
     
-
-    
-
-
 
     
 

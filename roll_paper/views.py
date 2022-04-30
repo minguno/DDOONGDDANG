@@ -20,7 +20,8 @@ def userlst(request):
 
 # @require_http_methods(['GET', 'POST'])
 # @login_required
-def write(request):
+def write(request, user_pk):
+    user = get_object_or_404(User, pk=user_pk)
 
     if request.method == 'POST':
         form = RollPaperForm(request.POST)
@@ -30,7 +31,7 @@ def write(request):
             rollpaper.save()
 
             messages.add_message(request, messages.INFO, '편지가 성공적으로 작성되었습니다.')
-            return redirect('rollpaper:user_lst')
+            return redirect('roll_paper:user_lst')
 
     else:
         form = RollPaperForm()
@@ -48,7 +49,7 @@ def detail(request, rollpaper_pk):
     return render(request, 'roll_paper/detail.html', context)
 
 
-def udpate(request, rollpaper_pk):
+def update(request, rollpaper_pk):
     rollpaper = get_object_or_404(RollPaper, pk=rollpaper_pk)
 
     if request.method == 'POST':
