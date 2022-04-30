@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<form action="{% url 'rollpaper:write' %}" method='GET'>
+<form action="{% url 'rollpaper:write' user.pk %}" method='GET'>
   {% for user in user_lst %}
-    {{ user }}
+    <button>{{ user.realname }}</button>
 
   {% endfor %}
 </form>

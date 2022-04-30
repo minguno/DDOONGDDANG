@@ -14,13 +14,13 @@ from django.views.decorators.http import require_POST
 def signup(request):
 
     if request.user.is_authenticated:
-        return redirect('roll_paper:index')
+        return redirect('rollpaper:index')
         
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            return redirect('roll_paper:index')
+            return redirect('rollpaper:index')
     else:
         form = CustomUserCreationForm()
 
@@ -42,7 +42,7 @@ def login(request):
 
             next_url = request.GET.get('next')
 
-            return redirect(next_url or 'roll_paper:index')
+            return redirect(next_url or 'rollpaper:index')
 
     else:
         form = AuthenticationForm()
@@ -58,7 +58,7 @@ def login(request):
 @require_POST
 def logout(request):
     auth_logout(request)
-    return redirect('roll_paper:index')
+    return redirect('rollpaper:index')
 
 
 @login_required
@@ -78,7 +78,7 @@ def update(request):
 
                 update_session_auth_hash(request, form2.user)
 
-            return redirect('roll_paper:index')
+            return redirect('rollpaper:index')
 
     form1 = CustomUserChangeForm(instance = request.user) # 현재 로그인 된 유저 객체
     form2 = PasswordChangeForm(user=request.user)
