@@ -191,7 +191,64 @@
   
   #### 5) 워드 클라우드
   
+  > 서비스 개시 전, 사전 설문조사를 통해 몇가지 질문에 대한 서비스 대상 유저의 답변을 수집했다. 수집한 답변을 모두 텍스트파일에 옮긴 후, 이러한 텍스트 파일을 기반으로 워드클라우드를 만들어 편지 읽기 화면에 출력했다.
+  >
+  > 워드클라우드 구현에 필요한 모듈은 다음과 같다.
+  >
+  > ```python
+  > from wordcloud import WordCloud
+  > from collections import Counter
+  > from konlpy.tag import Okt
+  > from PIL import Image
+  > import numpy as np
+  > ```
+  >
+  > - WordCloud : 워드클라우드를 생성할 수 있게 해주는 모듈이다.
+  >
+  > - Counter : 텍스트를 추출하고, 추출한 텍스트의 빈도수를 계산하기 위한 모듈이다.
+  >
+  > - Okt : 한국어의 형태소 분석을 위한 모듈이다.
+  >
+  > - Image : 워드클라우드를 원하는 형태로 그리기 위해 그림을 불러오는 모듈이다. 이번 프로젝트의 경우 네잎클로버의 이미지를 사용하였다.
+  >
+  > - np : 불러온 그림을 배열로 나타내어 쉽게 처리할 수 있도록 도와주는 모듈이다. 
+  >
+  >   
+  >
+  >
+  > 워드클라우드 구현을 위한 코드는 다음과 같다.
+  >
+  > ```python
+  > # wordcloud.txt : 사전에 준비한 설문조사 텍스트 파일
+  > with open('wordcloud.txt', 'r', encoding='utf-8') as f:
+  >     text = f.read()
   > 
+  > okt = Okt()
+  > # 텍스트의 형태소들을 분석한다.
+  > morphs = okt.morphs(text)
+  > 
+  > # 글자수가 1자 이하인 경우는 전부 버린다.
+  > words = [n for n in morphs if len(n) > 1]
+  > 
+  > c = Counter(words)
+  > 
+  > # 사전에 준비한 네잎클로버의 이미지로 워드클라우드를 생성한다.
+  > img = Image.open('./static/clover.jpeg')
+  > # 페이지를 새로고침 할 때 마다 이미지 안의 글자 배열이 바뀐다.
+  > img_array = np.array(img)
+  > 
+  > # 워드클라우드 생성
+  > wc = WordCloud(
+  >     font_path='static/css/BMHANNA_11yrs_ttf.ttf', 
+  >     width=800, height=800, scale=0.8, 
+  >     max_font_size=100, 
+  >     background_color="white", 
+  >     mask=img_array
+  >     ).generate_from_frequencies(c)
+  > 
+  > # 생성한 워드클라우드의 이미지를 저장한다.
+  > wc.to_file('./static/wordcloud.jpg')
+  > ```
 
 
 
